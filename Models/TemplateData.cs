@@ -8,7 +8,6 @@ namespace APISendgrid.Models
   public class ExampleTemplateData
   {
     [Key]
-    public int Id {get; set;}
     [JsonProperty("subject")]
     public string Subject { get; set; }
 

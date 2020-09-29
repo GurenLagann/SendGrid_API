@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 using APISendgrid.Models;
 using APISendgrid.Data;
@@ -23,82 +24,35 @@ namespace APISendgrid.Controllers
 
     [HttpPost]
     [Route("")]
-
-    public async Task<ActionResult<Email>> Post(
-      [FromServices]DataContext context,
+    public async Task<ActionResult<dynamic>> Post(
       [FromBody]Email model
     )
     {
-      if(ModelState.IsValid){
-        context.Email.Add(model);
-        await context.SaveChangesAsync();       
-        return model;
-      }
-      else
-      {
-        return BadRequest(ModelState);
-      }
-
-
-    }
-
-    static async Task Execute()
-    {
-
-      var send = new Email();
-
-      var apiKey = "SENDGRID_APIKEY"; 
+      Console.WriteLine(model);
+      var apiKey = "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"; 
       var client = new SendGridClient(apiKey);
-
       var from = new EmailAddress("wallace.nascimento@lftm.com.br", "Wallace Brito");
-      var to = new EmailAddress(send.Emails, send.Template.Name);
-      var templateId = send.TemplateId;
+      var to = new EmailAddress(model.Emails, model.Template.Name);
+      var templateId = model.TemplateId;
       var dynamicTemplateData = new ExampleTemplateData
       {
-        Subject = send.Template.Subject,
-        Name = send.Template.Name,
-        Valor = send.Template.Valor
+        Subject = model.Template.Subject,
+        Name = model.Template.Name,
+        Valor = model.Template.Valor
       };
 
-      // var from = new EmailAddress("wallace.nascimento@lftm.com.br", "Wallace Brito");
-      // var tos = new List<EmailAddress>
-      // {
-      //     new EmailAddress("dragonwits@gmail.com", "Wallace"),
-      //     new EmailAddress("samuel.conceicao@lifetimeinvest.com.br", "Samuel"),
-      //     new EmailAddress("pedro.silva@lftm.com.br", "Pedro")
-      // };
-      
-      // var templateId = "d-9d2b006a4d354f2ab7438ee69a61782f";
-      // var dynamicTemplateData = new List<Object>
-      // {
-      //     new ExampleTemplateData  {
-      //         Subject = "Hi!",
-      //         Name = "Wallace",
-      //         Valor = "500,00"
-      //     },
-      //     new ExampleTemplateData  {
-      //         Subject = "Hi!",
-      //         Name = "Samuel",
-      //         Valor = "1500,00"                    
-      //     },
-      //     new ExampleTemplateData  {
-      //         Subject = "Hi!",
-      //         Name = "Pedro",
-      //         Valor = "5000,00"
-      //     }
-      // };
-
       var msg = MailHelper.CreateSingleTemplateEmail(
-                                                                      from,
-                                                                      to,
-                                                                      templateId,
-                                                                      dynamicTemplateData                                                                            
-                                                                      );
+                                                      from,
+                                                      to,
+                                                      templateId,
+                                                      dynamicTemplateData                                                                            
+                                                    );
 
       var response = await client.SendEmailAsync(msg);
       Console.WriteLine(response.StatusCode);
       Console.WriteLine(response.Headers.ToString());
+
+      return (model);
     }
   }
-
 }

@@ -4,16 +4,15 @@ using Newtonsoft.Json;
 
 namespace APISendgrid.Models
 {  
-  public class Content
-  {
-     [JsonProperty("Content")]
-     public List<Email> content {get; set;}
-  }
+  // public class Content
+  // {
+  //    [JsonProperty("Content")]
+  //    public List<Email> content {get; set;}
+  // }
   public class Email
   {
-   [Key] 
-   
-    public int Id {get; set;}
+   [Key]
+   public int Id {get; set;}
    
     [JsonProperty("email")]
     public string Emails {get; set;}
