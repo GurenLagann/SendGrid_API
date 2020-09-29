@@ -29,7 +29,7 @@ namespace APISendgrid.Controllers
     )
     {
       Console.WriteLine(model);
-      var apiKey = "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"; 
+      var apiKey = "KEY SENDGRID"; 
       var client = new SendGridClient(apiKey);
       var from = new EmailAddress("wallace.nascimento@lftm.com.br", "Wallace Brito");
       var to = new EmailAddress(model.Emails, model.Template.Name);
